@@ -24,14 +24,16 @@ export async function GET(request: NextRequest) {
 
   const query = request.nextUrl.searchParams.get("q") ?? "";
   const userId = session.user.id;
+  const likePattern = `%${query}%`;
 
-  // ❌ VULNERABILITY: String interpolation directly into raw SQL.
-  // Never do this with user-supplied input.
-  const sql = `SELECT id, title, content, userId, createdAt FROM Note WHERE userId = '${userId}' AND content LIKE '%${query}%'`;
-
+  // ✅ SECURE: Using template literal with $queryRaw automatically parameterizes the inputs.
+  // The SQL engine sees: SELECT id, title, content, userId, createdAt FROM Note WHERE userId = ? AND content LIKE ?
+  // and treats variables as parameters, not executable SQL.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const notes: any[] = await prisma.$queryRawUnsafe(sql);
+  const notes: any[] = await prisma.$queryRaw`SELECT id, title, content, userId, createdAt FROM Note WHERE userId = ${userId} AND content LIKE ${likePattern}`;
 
-  // Return with metadata so the UI can show the constructed query
-  return NextResponse.json({ notes, sql_executed: sql });
+  // Safe explanation of executed query
+  const sqlParamInfo = `SELECT id, title, content, userId, createdAt FROM Note WHERE userId = ? AND content LIKE ?\n[Parameters: ?1 = "${userId}", ?2 = "${likePattern}"]`;
+
+  return NextResponse.json({ notes, sql_executed: sqlParamInfo });
 }

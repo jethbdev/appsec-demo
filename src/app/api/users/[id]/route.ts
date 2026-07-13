@@ -22,8 +22,14 @@ export async function GET(
 
   const { id } = await params;
 
-  // ❌ VULNERABILITY: We use the id from the URL directly with NO ownership check.
-  // A logged-in user can change this id to any other user's id and get their data.
+  // ✅ SECURE: Check that the authenticated user is requesting their own data.
+  if (session.user.id !== id) {
+    return NextResponse.json(
+      { error: "Forbidden: you may not access another user's data." },
+      { status: 403 }
+    );
+  }
+
   const user = await prisma.user.findUnique({
     where: { id },
     select: { id: true, name: true, email: true, createdAt: true },
