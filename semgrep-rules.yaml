@@ -1,0 +1,23 @@
+rules:
+  - id: prisma-sqli-unsafe-query
+    message: "Critical: Do not use string interpolation with '$queryRawUnsafe'. This causes SQL Injection vulnerabilities. Use parameterized queryRaw instead."
+    languages:
+      - typescript
+      - javascript
+    severity: ERROR
+    metadata:
+      owasp:
+        - A03:2021-Injection
+    pattern-either:
+      # Pattern 1: Direct string interpolation in queryRawUnsafe
+      - pattern: $PRISMA.$queryRawUnsafe(`...${...}...`)
+      # Pattern 2: Assignment of interpolated template string to variable, then passed to queryRawUnsafe
+      - pattern: |
+          const $VAR = `...${...}...`;
+          ...
+          $PRISMA.$queryRawUnsafe($VAR);
+      # Pattern 3: Any let/var assignment as well
+      - pattern: |
+          let $VAR = `...${...}...`;
+          ...
+          $PRISMA.$queryRawUnsafe($VAR);
