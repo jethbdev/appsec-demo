@@ -7,9 +7,12 @@ const cache = new Map<string, { body: string; headers: HeadersInit; expiry: numb
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   
-  // ❌ VULNERABILITY: The cache key only checks the URL path.
-  // It completely ignores the X-Custom-Header when choosing what response to cache.
-  const cacheKey = url.pathname;
+  const customHeader = request.headers.get("X-Custom-Header") || "Guest Guest";
+
+  // ✅ FIXED: Include the header in the cache key.
+  // This makes the header a "keyed" input, so responses with different header values
+  // are cached under different keys and cannot poison each other.
+  const cacheKey = `${url.pathname}::${customHeader}`;
 
   const now = Date.now();
   const cached = cache.get(cacheKey);
@@ -22,9 +25,6 @@ export async function GET(request: NextRequest) {
       },
     });
   }
-
-  // Reflect an unkeyed header into the cached HTML
-  const customHeader = request.headers.get("X-Custom-Header") || "Guest Guest";
 
   // Vulnerable HTML response reflecting unsanitized input
   const htmlResponse = `
