@@ -230,6 +230,33 @@ export default async function DashboardPage() {
                 </svg>
               </div>
             </a>
+
+            {/* Web Cache Poisoning Card */}
+            <a
+              href="/cache-demo"
+              className="group flex flex-col gap-3 rounded-xl border border-red-500/30 bg-slate-900/60 p-5 transition-all duration-200 hover:border-red-400/60 hover:bg-red-500/5"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/15 text-xl">
+                  📦
+                </div>
+                <span className="rounded-full border border-red-500/40 bg-red-500/10 px-2 py-0.5 text-xs font-bold text-red-400 uppercase tracking-wider">
+                  OWASP A06
+                </span>
+              </div>
+              <div>
+                <p className="font-semibold text-white mb-1">Web Cache Poisoning</p>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Inject HTML/JS into an unkeyed header to poison the shared cache, serving XSS payloads to subsequent normal visitors.
+                </p>
+              </div>
+              <div className="flex items-center gap-1 text-xs text-red-400 group-hover:text-red-300 transition-colors mt-auto">
+                Try it now
+                <svg className="h-3 w-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </a>
           </div>
         </div>
       </div>
