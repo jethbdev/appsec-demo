@@ -102,7 +102,7 @@ export default function CacheDemoPage() {
               key={reloadKey}
               src={frameUrl}
               className="w-full flex-1 rounded-xl border border-slate-700 bg-slate-950 overflow-hidden"
-              sandbox="allow-scripts allow-modals"
+              sandbox="allow-scripts allow-modals allow-same-origin"
             />
           </div>
         </div>
