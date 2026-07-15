@@ -77,37 +77,10 @@ Unsanitized user input is concatenated directly into a raw database query, allow
     *   Show [`src/app/api/notes/search/route.ts`](src/app/api/notes/search/route.ts). Explain why `$queryRawUnsafe` with string interpolation is vulnerable.
     *   Explain the fix: Use parameterized queries (`$queryRaw` tagged templates or standard Prisma ORM methods).
 
----
-
-## 📦 Demo 3: Web Cache Poisoning (HTML/XSS Injection)
-
-### Concept
-A caching proxy (CDN) caches page output based solely on the URL path. If the page reflects an HTTP header (unkeyed input) directly into the HTML, an attacker can cache a malicious script on that URL, which is then served to all future visitors.
-
-### Live Step-by-Step
-1.  Navigate to the **Web Cache Poisoning** card (`/cache-demo`) as **User B (Attacker)**.
-2.  Observe the **User Web Page (Live Cache Frame)** iframe on the right. This represents a normal visitor viewing the cached site.
-3.  **Execute the Poisoning:**
-    *   In the **Poisoning Payload Header** box, paste:
-        ```html
-        <img src=x onerror=alert('Cache Poisoned!')>
-        ```
-    *   Click **Send Poison Request**. 
-    *   Notice the Cache Status says **MISS** (meaning the server rendered this response fresh with the payload and cached it).
-4.  **The Reveal (As the Victim):**
-    *   Click **Normal User Visit** (simulates a standard user visiting the page with no special headers).
-    *   The iframe reloads, displaying Cache Status: **HIT**.
-    *   An **Alert Popup** immediately executes in the frame. The cache has been successfully poisoned with XSS.
-5.  **Show the Code & Fix:**
-    *   Show [`src/app/api/cache-demo/route.ts`](src/app/api/cache-demo/route.ts). Point out that the `cacheKey` only uses `url.pathname`.
-    *   Explain the fix: Make the header a *keyed input* by appending it to the `cacheKey`:
-        ```typescript
-        const cacheKey = `${url.pathname}::${customHeader}`;
-        ```
 
 ---
 
-## 🔍 Demo 4: Static Analysis (Semgrep)
+## 🔍 Demo 3: Static Analysis (Semgrep)
 
 To show how security automation detects these issues in CI/CD pipelines:
 
@@ -130,7 +103,7 @@ To show how security automation detects these issues in CI/CD pipelines:
 
 ---
 
-## 🔑 Demo 5: Secret Scanning (Gitleaks)
+## 🔑 Demo 4: Secret Scanning (Gitleaks)
 
 To show how scanners detect hardcoded API keys/credentials in git history:
 
