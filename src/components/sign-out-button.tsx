@@ -11,8 +11,7 @@ export default function SignOutButton() {
   const handleSignOut = async () => {
     setLoading(true);
     await signOut();
-    router.push("/login");
-    router.refresh();
+    window.location.href = "/login";
   };
 
   return (
