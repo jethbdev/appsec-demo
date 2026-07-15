@@ -41,6 +41,7 @@ export default function HomePage() {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              suppressHydrationWarning
             >
               <path
                 strokeLinecap="round"
