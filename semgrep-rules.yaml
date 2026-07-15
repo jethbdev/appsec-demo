@@ -1,0 +1,17 @@
+rules:
+  - id: prisma-query-raw-unsafe-sqli
+    patterns:
+      - pattern: prisma.$queryRawUnsafe(`...${...}...`)
+    message: |
+      Potential SQL Injection via `prisma.$queryRawUnsafe()` with string interpolation.
+      User-controlled input is interpolated directly into the SQL string, which allows
+      an attacker to manipulate the query structure.
+      Use `prisma.$queryRaw` (tagged template) or the Prisma ORM API instead.
+    languages: [typescript, javascript]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe: "CWE-89: Improper Neutralization of Special Elements used in an SQL Command"
+      owasp: "A03:2021 - Injection"
+      references:
+        - https://www.prisma.io/docs/orm/prisma-client/queries/raw-database-access/raw-queries#queryrawunsafe
