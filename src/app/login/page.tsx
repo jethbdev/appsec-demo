@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn, signUp } from "@/lib/auth-client";
 
 type Mode = "login" | "signup";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [mode, setMode] = useState<Mode>("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,8 +29,7 @@ export default function LoginPage() {
         if (result.error) {
           setError(result.error.message ?? "Sign-up failed.");
         } else {
-          router.push("/dashboard");
-          router.refresh();
+          window.location.href = "/dashboard";
         }
       } else {
         const result = await signIn.email({
@@ -42,8 +39,7 @@ export default function LoginPage() {
         if (result.error) {
           setError(result.error.message ?? "Invalid credentials.");
         } else {
-          router.push("/dashboard");
-          router.refresh();
+          window.location.href = "/dashboard";
         }
       }
     } catch {
