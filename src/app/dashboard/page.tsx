@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import SignOutButton from "@/components/sign-out-button";
 
 export default async function DashboardPage() {
@@ -39,23 +40,47 @@ export default async function DashboardPage() {
       <div className="relative z-10 mx-auto max-w-4xl">
         {/* Header */}
         <header className="mb-10 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600">
-              <svg
-                className="h-5 w-5 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600">
+                <svg
+                  className="h-5 w-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  suppressHydrationWarning
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  />
+                </svg>
+              </div>
+              <span className="text-lg font-semibold text-white">AppSec Demo</span>
             </div>
-            <span className="text-lg font-semibold text-white">AppSec Demo</span>
+            
+            <nav className="flex items-center gap-4">
+              <Link
+                href="/dashboard"
+                className="text-sm font-semibold text-white transition-colors"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href={`/profile/${user.id}`}
+                className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
+              >
+                Profile
+              </Link>
+              <Link
+                href="/notes"
+                className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
+              >
+                Notes
+              </Link>
+            </nav>
           </div>
           <SignOutButton />
         </header>
@@ -159,105 +184,6 @@ export default async function DashboardPage() {
               </p>
             </div>
           ))}
-        </div>
-
-
-        {/* ═══ AppSec Demo Vulnerabilities ═══ */}
-        <div className="mt-6 rounded-2xl border-2 border-red-500/30 bg-red-500/5 p-6">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-500/20 text-lg">
-              🔓
-            </div>
-            <div>
-              <h2 className="font-bold text-white">AppSec Demo — Intentional Vulnerabilities</h2>
-              <p className="text-xs text-slate-500 mt-0.5">Educational only. These vulnerabilities are deliberately introduced for demonstration.</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* IDOR Card */}
-            <a
-              href={`/profile/${user.id}`}
-              className="group flex flex-col gap-3 rounded-xl border border-red-500/30 bg-slate-900/60 p-5 transition-all duration-200 hover:border-red-400/60 hover:bg-red-500/5"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/15 text-xl">
-                  🔁
-                </div>
-                <span className="rounded-full border border-red-500/40 bg-red-500/10 px-2 py-0.5 text-xs font-bold text-red-400 uppercase tracking-wider">
-                  OWASP A01
-                </span>
-              </div>
-              <div>
-                <p className="font-semibold text-white mb-1">IDOR — Broken Access Control</p>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  View your profile, then swap the ID in the URL to see another user&apos;s private data. No auth check on the server.
-                </p>
-              </div>
-              <div className="flex items-center gap-1 text-xs text-red-400 group-hover:text-red-300 transition-colors mt-auto">
-                Try it now
-                <svg className="h-3 w-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </div>
-            </a>
-
-            {/* SQL Injection Card */}
-            <a
-              href="/notes"
-              className="group flex flex-col gap-3 rounded-xl border border-orange-500/30 bg-slate-900/60 p-5 transition-all duration-200 hover:border-orange-400/60 hover:bg-orange-500/5"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-500/15 text-xl">
-                  💉
-                </div>
-                <span className="rounded-full border border-orange-500/40 bg-orange-500/10 px-2 py-0.5 text-xs font-bold text-orange-400 uppercase tracking-wider">
-                  OWASP A03
-                </span>
-              </div>
-              <div>
-                <p className="font-semibold text-white mb-1">SQL Injection — Data Exfiltration</p>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Create private notes, then inject{" "}
-                  <code className="font-mono text-orange-300">{"' OR '1'='1"}</code>{" "}
-                  into the search to leak all users&apos; notes via <code className="font-mono text-orange-300">$queryRawUnsafe()</code>.
-                </p>
-              </div>
-              <div className="flex items-center gap-1 text-xs text-orange-400 group-hover:text-orange-300 transition-colors mt-auto">
-                Try it now
-                <svg className="h-3 w-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </div>
-            </a>
-
-            {/* Web Cache Poisoning Card */}
-            <a
-              href="/cache-demo"
-              className="group flex flex-col gap-3 rounded-xl border border-red-500/30 bg-slate-900/60 p-5 transition-all duration-200 hover:border-red-400/60 hover:bg-red-500/5"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/15 text-xl">
-                  📦
-                </div>
-                <span className="rounded-full border border-red-500/40 bg-red-500/10 px-2 py-0.5 text-xs font-bold text-red-400 uppercase tracking-wider">
-                  OWASP A06
-                </span>
-              </div>
-              <div>
-                <p className="font-semibold text-white mb-1">Web Cache Poisoning</p>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Inject HTML/JS into an unkeyed header to poison the shared cache, serving XSS payloads to subsequent normal visitors.
-                </p>
-              </div>
-              <div className="flex items-center gap-1 text-xs text-red-400 group-hover:text-red-300 transition-colors mt-auto">
-                Try it now
-                <svg className="h-3 w-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </div>
-            </a>
-          </div>
         </div>
       </div>
     </main>
